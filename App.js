@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, AppRegistry } from 'react-native';
-import InputButton from './src/components/InputButton';
+import InputButton from './src/InputButton';
 
 const inputButtons = [
      [1, 2, 3, '/'],
@@ -10,25 +10,66 @@ const inputButtons = [
  ];
 
 class App extends Component {
- 
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      previousInputValue: 0,
+      inputValue: 0,
+      selectedSymbol: null
+    }
+  }
+
   render() {
-     const { rootContainer, displayContainer, inputContainer, inputRow } = styles;
+     const { rootContainer, displayContainer, inputContainer, inputRow, displayText } = styles;
     return (
         <View style={rootContainer}>
-          <View style={displayContainer}></View>
-          <View style={inputContainer}></View>
+          <View style={displayContainer}>
+              <Text style={displayText}>{this.state.inputValue}</Text>
+          </View>
+          <View style={inputContainer}>
+              {this._renderInputButtons()}
+             
+          </View>
         </View>
       )
   }
 
   _renderInputButtons() {
     let views = [];
-    inputButtons.forEach((row, rowIndex) => {
-      let inputRow = [];
-      row.forEach((input, inputIndex) => {
-        inputRow.push(<InputButton value={input} key={`btn-${inputIndex}`} />);
-      });
-      views.push(<View style={inputRow} key={`row-${rowIndex}`} >{inputRow}</View>);
+     for (var r = 0; r < inputButtons.length; r ++) {
+         let row = inputButtons[r];
+
+         let inputRow = [];
+         for (var i = 0; i < row.length; i ++) {
+           let input = row[i];
+         
+        inputRow.push(<InputButton value="{input}"
+                                   highlight={this.state.selectedSymbol === input}
+                                   onPress={this._onInputButtonPressed.bind(this, input)}
+                                    key={r + "-" + i} />
+                                    );
+     }
+     
+      views.push(<View style={inputRow} key="{`row-${rowIndex}`}">{inputRow}</View>);
+    }
+
+     return views;
+
+  }
+ _onInputButtonPressed(alert) {
+      switch (typeof input) {
+        case 'number':
+          return this._handleNumberInput(input)
+      }
+    } 
+
+  _handleNumberInput(num) {
+    let inputValue = (this.state.inputValue * 10) + num;
+
+    this.setState({
+        inputValue: inputValue
     })
   }
 
@@ -41,7 +82,8 @@ const styles = {
 
   displayContainer: {
     flex: 2,
-    backgroundColor: '#193441'
+    backgroundColor: '#193441',
+    justifyContent: 'center'
   },
 
   inputContainer: {
@@ -52,6 +94,14 @@ const styles = {
   inputRow: {
     flex: 1,
     flexDirection: 'row'
+  },
+
+  displayText: {
+    color: 'white',
+    fontSize: 38,
+    fontWeight: 'bold',
+    textAlign: 'right',
+    padding: 20
   }
 }
 

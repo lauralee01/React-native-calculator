@@ -5,9 +5,10 @@ class InputButton extends Component {
 	render() {
 		const { inputButton, inputButtonText} = styles;
 		return (
-			<TouchableHighlight style ={inputButton} underlayColor="#193441" onPress={this.props.onPress}>
+			<TouchableHighlight style ={inputButton}
+								underlayColor="#193441"
+								onPress={this.props.onPress}>
 				<Text style = {inputButtonText}>{this.props.value}</Text>
-			}
 			</TouchableHighlight>
 			)
 	}
