@@ -21,6 +21,8 @@ class App extends Component {
     }
   }
 
+
+
   render() {
      const { rootContainer, displayContainer, inputContainer, inputRow, displayText } = styles;
     return (
@@ -37,33 +39,60 @@ class App extends Component {
   }
 
   _renderInputButtons() {
-    let views = [];
-     for (var r = 0; r < inputButtons.length; r ++) {
-         let row = inputButtons[r];
+    let views = inputButtons.map((row, idx) => {
+      let inputRow = row.map((buttonVal, columnIdx) => {
+        return <InputButton
+                    value={buttonVal} 
+                    highlight={this.state.selectedSymbol === buttonVal}
+                    onPress = {this._onInputButtonPressed.bind(this, buttonVal)}
+                    key={'butt-' + columnIdx}
+               />;
+      });
 
-         let inputRow = [];
-         for (var i = 0; i < row.length; i ++) {
-           let input = row[i];
-         
-        inputRow.push(<InputButton value="{input}"
-                                   highlight={this.state.selectedSymbol === input}
-                                   onPress={this._onInputButtonPressed.bind(this, input)}
-                                    key={r + "-" + i} />
-                                    );
-     }
-     
-      views.push(<View style={inputRow} key="{`row-${rowIndex}`}">{inputRow}</View>);
-    }
+     return <View style={inputRow} key={'row-' + idx}>{inputRow}</View>;
+    })
 
      return views;
 
   }
- _onInputButtonPressed(alert) {
+ _onInputButtonPressed(input) {
       switch (typeof input) {
         case 'number':
           return this._handleNumberInput(input)
+        case 'string':
+          return this._handleStringInput(input) 
       }
     } 
+
+  _handleStringInput(str) {
+    switch (str) {
+      case '/':
+      case '*':
+      case '+':
+         this.setState({
+           selectedSymbol: str,
+           previousInputValue: this.state.inputValue,
+           inputValue: 0
+         });
+        break;
+
+      case '=': 
+        let symbol = this.state.selectedSymbol,
+            inputValue = this.state.inputValue,
+            previousInputValue = this.state.previousInputValue;
+
+         if(!symbol) {
+           return;
+         }  
+
+         this.setState({
+             previousInputValue: 0,
+             inputValue: eval(previousInputValue + symbol + inputValue),
+             selectedSymbol: null
+         });
+         break; 
+    }
+  }
 
   _handleNumberInput(num) {
     let inputValue = (this.state.inputValue * 10) + num;
