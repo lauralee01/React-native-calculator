@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { TouchableHighlight, Text } from 'react-native';
 
 class InputButton extends Component {
 	render() {
 		const { inputButton, inputButtonText} = styles;
 		return (
-			<View style ={inputButton}>
+			<TouchableHighlight style ={inputButton} underlayColor="#193441" onPress={this.props.onPress}>
 				<Text style = {inputButtonText}>{this.props.value}</Text>
-			</View>
+			}
+			</TouchableHighlight>
 			)
 	}
 }
