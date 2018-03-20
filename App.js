@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { View, Text, AppRegistry } from 'react-native';
+import Style from './src/Style';
 import InputButton from './src/InputButton';
 
 const inputButtons = [
      [1, 2, 3, '/'],
      [4, 5, 6, '*'],
      [7, 8, 9, '-'],
-     [0, '.', '=', '+']
+     [0, '.', '=', '+'],
+     ['del', 'ce']
  ];
 
 class App extends Component {
@@ -24,13 +26,13 @@ class App extends Component {
 
 
   render() {
-     const { rootContainer, displayContainer, inputContainer, inputRow, displayText } = styles;
+     
     return (
-        <View style={rootContainer}>
-          <View style={displayContainer}>
-              <Text style={displayText}>{this.state.inputValue}</Text>
+        <View style={Style.rootContainer}>
+          <View style={Style.displayContainer}>
+              <Text style={Style.displayText}>{this.state.inputValue}</Text>
           </View>
-          <View style={inputContainer}>
+          <View style={Style.inputContainer}>
               {this._renderInputButtons()}
              
           </View>
@@ -49,7 +51,7 @@ class App extends Component {
                />;
       });
 
-     return <View style={inputRow} key={'row-' + idx}>{inputRow}</View>;
+     return <View style={Style.inputRow} key={'row-' + idx}>{inputRow}</View>;
     })
 
      return views;
@@ -91,6 +93,27 @@ class App extends Component {
              selectedSymbol: null
          });
          break; 
+
+          case 'ce':
+                this.setState({inputValue: 0});
+                    break;
+          case '.':
+            this.setState({
+              isDecimal: true,
+              selectedSymbol: str,
+              previousInputValue: this.state.inputValue
+            });
+             break;
+
+            case 'del': 
+        let inputValue = this.state.inputValue,
+            previousInputValue = this.state.previousInputValue;  
+
+         this.setState({
+             previousInputValue: this.inputValue,
+             inputValue: eval(previousInputValue - inputValue)
+         });
+         break; 
     }
   }
 
@@ -102,36 +125,15 @@ class App extends Component {
     })
   }
 
-}
+  _deleteNumberInput(num) {
+    let inputValue = (this.state.inputValue) - num;
 
-const styles = {
-  rootContainer: {
-    flex: 1
-  },
-
-  displayContainer: {
-    flex: 2,
-    backgroundColor: '#193441',
-    justifyContent: 'center'
-  },
-
-  inputContainer: {
-    flex: 8,
-    backgroundColor: '#3E606F'
-  }, 
-
-  inputRow: {
-    flex: 1,
-    flexDirection: 'row'
-  },
-
-  displayText: {
-    color: 'white',
-    fontSize: 38,
-    fontWeight: 'bold',
-    textAlign: 'right',
-    padding: 20
+    this.setState({
+      inputValue: inputValue
+    })
   }
+
 }
+
 
 export default App;
