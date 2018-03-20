@@ -3,9 +3,10 @@ import { TouchableHighlight, Text } from 'react-native';
 
 class InputButton extends Component {
 	render() {
-		const { inputButton, inputButtonText} = styles;
+		const { inputButton, inputButtonText, inputButtonHighlighted} = styles;
 		return (
-			<TouchableHighlight style ={inputButton}
+			<TouchableHighlight style ={[inputButton, this.props.highlight ? inputButtonHighlighted : null]}
+								
 								underlayColor="#193441"
 								onPress={this.props.onPress}>
 				<Text style = {inputButtonText}>{this.props.value}</Text>
@@ -27,6 +28,10 @@ const styles = {
 		fontSize: 22,
 		fontWeight: 'bold',
 		color: 'white'
+	},
+
+	inputButtonHighlighted: {
+		backgroundColor: '#193441'
 	}
 }
 
