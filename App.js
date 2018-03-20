@@ -8,7 +8,7 @@ const inputButtons = [
      [4, 5, 6, '*'],
      [7, 8, 9, '-'],
      [0, '.', '=', '+'],
-     ['del', 'ce']
+     ['ce', '%']
  ];
 
 class App extends Component {
@@ -105,15 +105,9 @@ class App extends Component {
             });
              break;
 
-            case 'del': 
-        let inputValue = this.state.inputValue,
-            previousInputValue = this.state.previousInputValue;  
-
-         this.setState({
-             previousInputValue: this.inputValue,
-             inputValue: eval(previousInputValue - inputValue)
-         });
-         break; 
+           case '%':
+            {this._handlePercentage()}
+             break;
     }
   }
 
@@ -125,12 +119,14 @@ class App extends Component {
     })
   }
 
-  _deleteNumberInput(num) {
-    let inputValue = (this.state.inputValue) - num;
+  _handlePercentage(num) {
+    let inputValue = (this.state.inputValue / 100) * num;
 
     this.setState({
-      inputValue: inputValue
+        inputValue: inputValue
     })
+
+
   }
 
 }
