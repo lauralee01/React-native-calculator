@@ -106,7 +106,9 @@ class App extends Component {
              break;
 
            case '%':
-            {this._handlePercentage()}
+        this.setState({
+             inputValue:  (this.state.inputValue / 100 )
+        })
              break;
     }
   }
@@ -117,15 +119,7 @@ class App extends Component {
     this.setState({
         inputValue: inputValue
     })
-  }
-
-  _handlePercentage(num) {
-    let inputValue = (this.state.inputValue / 100) * num;
-
-    this.setState({
-        inputValue: inputValue
-    })
-
+  
 
   }
 
